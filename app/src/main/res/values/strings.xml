@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MaceSegmentationDemo</string>
+    <integer name="expected_exec_time">1000</integer>
+    <integer name="base_cpu_exec_time">31</integer>
+</resources>
