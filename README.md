@@ -13,7 +13,7 @@ The project could extent to multiple kind models(classification, object detectio
 # 示例
 ![Demo](docs/demo.gif)
 
-**Tested with NDK-17b**
+> **Tested with NDK-17b**
 
 # 通用性问题
 如我们所知，现在没有办法做到在所有设备上都运行同一个模型，因为各设备的算力不尽相同。
@@ -35,8 +35,8 @@ MACE提供了查询运算设备（CPU，GPU等）算力的[接口](https://githu
 
 ## 使用方法
 有两个变量需要提前获取。
-* [BASE_CPU_EXEC_TIME](#): 测试设备的CPU capability。
-* [ModelInfo.baseCPUExexTime](#): 模型在测试设备上的CPU运行时间。
+* [BASE_CPU_EXEC_TIME](app/src/main/java/com/nolan/macesegmentationdemo/segmentation/ModelSelector.java): 测试设备的CPU capability。
+* [ModelInfo.baseCPUExexTime](app/src/main/java/com/nolan/macesegmentationdemo/common/ModelInfo.java): 模型在测试设备上的CPU运行时间。
 
 上述两个数值可以通过`MACE`的工具获取。
 ```bash
@@ -48,6 +48,9 @@ python tools/converter.py run --config=/path/to/model.yml --validate --disable_t
 2. Support multiple models with different input size
 3. Add DSP model
 4. Support multiple kind models
+
+## License
+[Apache License 2.0](LICENSE).
 
 # References
 1. **Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation**<br>

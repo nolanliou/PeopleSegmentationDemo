@@ -219,7 +219,7 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
   if (mace_engine_entity == nullptr) {
     __android_log_print(ANDROID_LOG_ERROR,
                         "MACE JNI",
-                        "Create engien entity failed");
+                        "Create engine entity failed");
     return JNI_ERR;
   }
   env->ReleaseStringUTFChars(raw_model_name, model_name_ptr);
@@ -239,8 +239,8 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
       true);
   if (status != mace::MaceStatus::MACE_SUCCESS) {
     __android_log_print(ANDROID_LOG_ERROR,
-                        "JNI Engine Creation",
-                        "openmp result: %s, threads: %d, cpu: %d",
+                        "MACE JNI",
+                        "Set CPU thread policy failed. openmp result: %s, threads: %d, cpu: %d",
                         status.information().c_str(), omp_num_threads,
                         cpu_affinity_policy);
   }
@@ -250,20 +250,20 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
         static_cast<mace::GPUPerfHint>(gpu_perf_hint),
         static_cast<mace::GPUPriorityHint>(gpu_priority_hint));
     __android_log_print(ANDROID_LOG_INFO,
-                        "JNI Engine Creation",
+                        "MACE JNI",
                         "gpu perf: %d, priority: %d",
                         gpu_perf_hint, gpu_priority_hint);
   }
 
   __android_log_print(ANDROID_LOG_INFO,
-                      "JNI Engine Creation",
-                      "device: %d",
+                      "MACE JNI",
+                      "Create engine on device: %d",
                       mace_engine_entity->model_info.device_type);
 
   AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
   if (mgr == nullptr) {
     __android_log_print(ANDROID_LOG_ERROR,
-                        "JNI Engine Creation",
+                        "MACE JNI",
                         "AAssetManager is NULL");
     return JNI_ERR;
   }
@@ -272,12 +272,11 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
   if (model_graph_file_ptr == nullptr) return JNI_ERR;
   AAsset* model_graph_asset = AAssetManager_open(mgr, model_graph_file_ptr, AASSET_MODE_UNKNOWN);
   if (model_graph_asset == nullptr) {
-    __android_log_print(ANDROID_LOG_ERROR, "JNI Engine Creation", "_ASSET_NOT_FOUND_");
+    __android_log_print(ANDROID_LOG_ERROR, "MACE JNI", "_ASSET_NOT_FOUND_");
     return JNI_ERR;
   }
   env->ReleaseStringUTFChars(model_graph_file_name, model_graph_file_ptr);
   size_t model_graph_size = static_cast<size_t>(AAsset_getLength(model_graph_asset));
-  __android_log_print(ANDROID_LOG_INFO, "JNI Engine Creation", "Got graph file %ld", model_graph_size);
   std::vector<unsigned char> model_graph_data(model_graph_size);
   AAsset_read(model_graph_asset, model_graph_data.data(), model_graph_size);
   AAsset_close(model_graph_asset);
@@ -286,12 +285,11 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
   if (model_weight_file_ptr == nullptr) return JNI_ERR;
   AAsset* model_weight_asset = AAssetManager_open(mgr, model_weight_file_ptr, AASSET_MODE_UNKNOWN);
   if (model_weight_asset == nullptr) {
-    __android_log_print(ANDROID_LOG_ERROR, "JNI Engine Creation", "_ASSET_NOT_FOUND_");
+    __android_log_print(ANDROID_LOG_ERROR, "MACE JNI", "_ASSET_NOT_FOUND_");
     return JNI_ERR;
   }
   env->ReleaseStringUTFChars(model_weight_file_name, model_weight_file_ptr);
   size_t model_weight_size = static_cast<size_t>(AAsset_getLength(model_weight_asset));
-  __android_log_print(ANDROID_LOG_INFO, "JNI Engine Creation", "Got weight file %ld", model_weight_size);
   mace_engine_entity->weight_data.resize(model_weight_size);
   AAsset_read(model_weight_asset, mace_engine_entity->weight_data.data(), model_weight_size);
   AAsset_close(model_weight_asset);
@@ -302,7 +300,6 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
   if (parse_status != JNI_OK) {
     return parse_status;
   }
-  __android_log_print(ANDROID_LOG_INFO, "JNI Engine Creation", "model info parsed");
 
   mace::MaceStatus create_engine_status =
       CreateMaceEngineFromProto(model_graph_data.data(),
@@ -315,8 +312,8 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
                                 &mace_engine_entity->engine);
 
   __android_log_print(ANDROID_LOG_INFO,
-                      "JNI Engine Creation",
-                      "create result: %s",
+                      "MACE JNI",
+                      "Engine creation result: %s",
                       create_engine_status.information().c_str());
   if (mace_engine_entity->model_info.device_type != mace::DeviceType::CPU) {
     mace_engine_entity->weight_data.clear();

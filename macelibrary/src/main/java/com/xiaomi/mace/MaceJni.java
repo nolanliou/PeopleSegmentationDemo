@@ -21,8 +21,20 @@ public class MaceJni {
     static {
         System.loadLibrary("mace_jni");
     }
+
+    /**
+     * Get device capability
+     * @param device device type
+     * @param base_cpu_exec_time CPU execution time on test device.
+     * @return float array with 2 elements: the former for float32 performance, the latter for quantized8 performance
+     */
     public static native float[] getDeviceCapability(String device, float base_cpu_exec_time);
 
+    /**
+     * Same with MACE definition.
+     * @param storagePath storage path
+     * @return status
+     */
     public static native int createGPUContext(String storagePath);
 
     /**
@@ -51,6 +63,12 @@ public class MaceJni {
                                           int[] input_shapes, int[] output_shapes,
                                           String device);
 
+    /**
+     * inference the model
+     * @param modelName model name(same with createEngine)
+     * @param input input array
+     * @return output of the model.
+     */
     public static native float[] inference(String modelName, float[] input);
 
 }
