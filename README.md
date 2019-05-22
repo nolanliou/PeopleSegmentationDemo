@@ -17,7 +17,7 @@ The project could extent to multiple kind models(classification, object detectio
 
 # 简介
 ## 通用性问题
-如我们所知，现在没有办法做到在所有设备上都运行同一个模型，因为各设备的算力不尽相同。
+目前来看，现在没有办法做到在所有设备上都运行同一个模型，因为各设备的算力不尽相同。
 目前的解决方案一般是根据设备的算力选择合适的模型，依据设备算力选择不同效果的模型，以最大化收益，
 比如最新的高通骁龙855机型，你可以使用DSP的模型，一般机型可以使用GPU，或者CPU量化模型。
 这个项目就是为了给大家展示一下基于[MACE](https://github.com/XiaoMi/mace)的通用性解决方案。
@@ -112,15 +112,15 @@ adb install app/build/outputs/apk/release/app-release.apk
 # References
 1. **Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation**<br>
 
-   Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, Hartwig Adam. arXiv: 1802.02611.<br>
+    Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, Hartwig Adam. arXiv: 1802.02611.<br>
 
-   [[link]](https://arxiv.org/abs/1802.02611). arXiv: 1802.02611, 2018.
+    [[link]](https://arxiv.org/abs/1802.02611). arXiv: 1802.02611, 2018.
    
-2.  **MobileNetV2: Inverted Residuals and Linear Bottlenecks**<br />
+2. **MobileNetV2: Inverted Residuals and Linear Bottlenecks**<br />
 
-   Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chieh Chen<br />
+    Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chieh Chen<br />
    
-   [[link]](https://arxiv.org/abs/1801.04381). In CVPR, 2018.
+    [[link]](https://arxiv.org/abs/1801.04381). In CVPR, 2018.
 
 # Acknowledgement
 [JejuNet](https://github.com/tantara/JejuNet)
