@@ -69,7 +69,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends AppCompatActivity {
     private static final String STORAGE_DIRECTORY = "mace_segmentation_demo";
-    private static final String PASCAL_LABELS_FILE = "file:///android_asset/pascal_voc_labels_list.txt";
+    private static final String PASCAL_LABELS_FILE = "file:///android_asset/labels_list.txt";
     private int GALLERY = 1, CAMERA = 2;
 
     private Button btn;
