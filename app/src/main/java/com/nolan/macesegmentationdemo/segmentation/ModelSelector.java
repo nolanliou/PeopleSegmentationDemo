@@ -22,7 +22,7 @@ import com.xiaomi.mace.MaceJni;
 
 public class ModelSelector {
     // Expected run time for your model
-    private static int EXPECTED_EXEC_TIME = 1500; // (ms)
+    private static int EXPECTED_EXEC_TIME = 1000; // (ms)
     // CPU run time of your test device (Get from MACE run)
     private static int BASE_CPU_EXEC_TIME = 31; // (ms)
 
@@ -32,12 +32,18 @@ public class ModelSelector {
 
     // The array is ordered by model priority
     public static ModelInfo[] modelInfos = new ModelInfo[] {
-            new ModelInfo("deeplab_v3_plus_mobilenet_v2",
-                    new String[]{"MobilenetV2/MobilenetV2/input"},
+            new ModelInfo("deeplab_v3_plus_mobilenet_v2_quant",
+                    new String[]{"Input"},
                     new Shape[]{new Shape(new int[]{1, 513, 513, 3})},
-                    new String[]{"ResizeBilinear_2"},
-                    new Shape[]{new Shape(new int[]{1, 513, 513, 21})},
-                    1150, false, false)
+                    new String[]{"ResizeBilinear_1"},
+                    new Shape[]{new Shape(new int[]{1, 513, 513, 2})},
+                    465, true, false),
+            new ModelInfo("deeplab_v3_plus_mobilenet_v2",
+                    new String[]{"Input"},
+                    new Shape[]{new Shape(new int[]{1, 513, 513, 3})},
+                    new String[]{"ResizeBilinear_1"},
+                    new Shape[]{new Shape(new int[]{1, 513, 513, 2})},
+                    465, false, false),
     };
 
     // Select the device and model for the phone.

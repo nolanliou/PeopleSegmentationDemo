@@ -235,8 +235,7 @@ Java_com_xiaomi_mace_MaceJni_createEngine(
   mace::MaceEngineConfig config(mace_engine_entity->model_info.device_type);
   status = config.SetCPUThreadPolicy(
       omp_num_threads,
-      static_cast<mace::CPUAffinityPolicy>(cpu_affinity_policy),
-      true);
+      static_cast<mace::CPUAffinityPolicy>(cpu_affinity_policy));
   if (status != mace::MaceStatus::MACE_SUCCESS) {
     __android_log_print(ANDROID_LOG_ERROR,
                         "MACE JNI",

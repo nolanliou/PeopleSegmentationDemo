@@ -32,9 +32,13 @@ namespace mace {
 
 class NetDef;
 
-enum DeviceType { CPU = 0, GPU = 2, HEXAGON = 3 };
+enum DeviceType { CPU = 0, GPU = 2, HEXAGON = 3, HTA = 4, APU = 5 };
 
-enum DataFormat { DF_NONE = 0, NHWC = 1, NCHW = 2};
+enum class DataFormat {
+  NONE = 0, NHWC = 1, NCHW = 2,
+  HWOI = 100, OIHW = 101, HWIO = 102, OHWI = 103,
+  AUTO = 1000,
+};
 
 enum GPUPerfHint {
   PERF_DEFAULT = 0,
@@ -144,7 +148,9 @@ class MaceStatus {
   enum Code {
     MACE_SUCCESS = 0,
     MACE_INVALID_ARGS = 1,
-    MACE_OUT_OF_RESOURCES = 2
+    MACE_OUT_OF_RESOURCES = 2,
+    MACE_UNSUPPORTED = 3,
+    MACE_RUNTIME_ERROR = 4,
   };
 
  public:
@@ -166,18 +172,6 @@ class MaceStatus {
   class Impl;
   std::unique_ptr<Impl> impl_;
 };
-
-
-#define MACE_RETURN_IF_ERROR(stmt)                                         \
-  {                                                                        \
-    MaceStatus status = (stmt);                                            \
-    if (status != MaceStatus::MACE_SUCCESS) {                              \
-      VLOG(0) << "Mace runtime failure: "                                  \
-              << __FILE__ << ":" << __LINE__ << ". "                       \
-              << status.information();                                     \
-      return status;                                                       \
-    }                                                                      \
-  }
 
 /// \brief GPU context contain the status used for GPU device.
 ///
@@ -306,11 +300,9 @@ class MACE_API MaceEngineConfig {
   /// \param status MACE_SUCCESS for successful, or it can't reliabley
   /// detect big-LITTLE cores (see GetBigLittleCoreIDs). In such cases, it's
   /// suggested to use AFFINITY_NONE to use all cores.
-  /// \param use_gemmlowp use gemmlowp for cpu quantized inference
   /// \return MaceStatus::MACE_SUCCESS for success, other for failed.
   MaceStatus SetCPUThreadPolicy(int num_threads_hint,
-                                CPUAffinityPolicy policy,
-                                bool use_gemmlowp = false);
+                                CPUAffinityPolicy policy);
 
  private:
   class Impl;
@@ -333,7 +325,7 @@ class MACE_API MaceTensor {
   //        of shared_ptr and manage the life cycle of the buffer by yourself.
   //        For example, std::shared_ptr<float>(raw_buffer, [](float *){});
   MaceTensor(const std::vector<int64_t> &shape,
-             std::shared_ptr<float> data,
+             std::shared_ptr<void> data,
              const DataFormat format = DataFormat::NHWC);
   MaceTensor();
   MaceTensor(const MaceTensor &other);
@@ -346,7 +338,19 @@ class MACE_API MaceTensor {
   const std::vector<int64_t> &shape() const;
   const std::shared_ptr<float> data() const;
   std::shared_ptr<float> data();
+  template <typename T>
+  const std::shared_ptr<T> data() const {
+    return std::static_pointer_cast<T>(raw_data());
+  }
+  template <typename T>
+  std::shared_ptr<T> data() {
+    return std::static_pointer_cast<T>(raw_mutable_data());
+  }
   DataFormat data_format() const;
+
+ private:
+  std::shared_ptr<void> raw_data() const;
+  std::shared_ptr<void> raw_mutable_data();
 
  private:
   class Impl;
