@@ -2,7 +2,7 @@
 
 这个项目旨在展示一种能够在尽可能多的Android设备上基于[MACE](https://github.com/XiaoMi/mace)运行神经网络模型的解决方案。
 
-此外，本项目提供了一个通用的MACE JNI的接口供大家参考，该套接口可以扩展支持多种模型。
+此外，本项目提供了一个通用的MACE JNI的接口供大家参考，该套接口可以扩展支持多种模型。参考[blog](https://zhuanlan.zhihu.com/p/66662510)可以了解完整的过程。
 
 This Application aim to show a solution to run NN models with [MACE](https://github.com/XiaoMi/mace) on
  as many android devices as possible.
@@ -11,9 +11,11 @@ The project could extent to multiple kind models(classification, object detectio
  and every kind model supports multiple different quality models for offering different effects for different devices.
  
 # 示例
+Prebuilt [APK](http://cnbj1.fds.api.xiaomi.com/mace/demo/people_segmentation_demo.apk).
+> **Build with NDK-17b**
+
 ![Demo](docs/demo.gif)
 
-> **Build with NDK-17b**
 
 # 简介
 ## 通用性问题
